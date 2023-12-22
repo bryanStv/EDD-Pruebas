@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DiasLluviosos {
@@ -13,8 +14,10 @@ public class DiasLluviosos {
 
     public static void main(String[] args) {
         //System.out.println(Arrays.toString(dias));
-        //registrarQueLlovioElDia(1,true);
-        //System.out.println(Arrays.toString(dias));
+        registrarQueLlovioElDia(121,true);
+        registrarQueLlovioElDia(120,true);
+        System.out.println(Arrays.toString(dias));
+        System.out.println(consultarCuatrimestreMasLluvioso());
     }
     public static void registrarQueLlovioElDia (int diaDeAño, boolean llovio){
         dias[diaDeAño] = llovio;
@@ -34,23 +37,25 @@ public class DiasLluviosos {
         return suma;
     }
     public static int consultarCuatrimestreMasLluvioso(){
-        int cuatrimestre = dias.length/4;
-        int cuatri = 1, totalRecorrido = 0, suma, resultado;
-        int masLluvioso = Integer.MIN_VALUE;
-        while(cuatri < 5){
-            suma = 0;
-            for(int i = 0; i < cuatrimestre;i++){
-                if(dias[totalRecorrido]){
-                    suma++;
+        int longitudCuatrimestre = dias.length / 4;
+        int sumaMayor = 0;
+        int cuatrimestreMayorSuma = 0;
+
+        for (int i = 0; i <= dias.length - longitudCuatrimestre; i += longitudCuatrimestre) {
+            int sumaCuatrimestre = 0;
+            for (int j = i; j < i + longitudCuatrimestre; j++) {
+                if (dias[j]) {
+                    sumaCuatrimestre++;
                 }
             }
-            if(suma > masLluvioso){
-                resultado = cuatri;
-                masLluvioso = suma;
+
+            if (sumaCuatrimestre > sumaMayor) {
+                sumaMayor = sumaCuatrimestre;
+                cuatrimestreMayorSuma = i / longitudCuatrimestre + 1; // +1 porque los cuatrimestres comienzan en 1
             }
-            cuatri++;
         }
-        return cuatri;
+
+        return cuatrimestreMayorSuma;
     }
     public static int consultarPrimerDiaConLluvia(){
         for (int i = 0; i < dias.length; i++) {

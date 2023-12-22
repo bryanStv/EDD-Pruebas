@@ -15,8 +15,14 @@ class DiasLluviososTest {
         }
     }
 
+    private static void vaciarDias(){
+        boolean[] diasVacios = new boolean[365];
+        DiasLluviosos.setDias(diasVacios);
+    }
+
     @org.junit.jupiter.api.Test
     void registrarQueLlovioElDia() {
+        vaciarDias();
         rellenarDias();
         //System.out.println(Arrays.toString(DiasLluviosos.getDias()));
         Assertions.assertTrue(DiasLluviosos.consultarSiLlovioElDia(1));
@@ -30,6 +36,7 @@ class DiasLluviososTest {
 
     @org.junit.jupiter.api.Test
     void consultarSiLlovioElDia() {
+        vaciarDias();
         rellenarDias();
         Assertions.assertTrue(DiasLluviosos.consultarSiLlovioElDia(15));
         Assertions.assertFalse(DiasLluviosos.consultarSiLlovioElDia(16));
@@ -39,6 +46,7 @@ class DiasLluviososTest {
 
     @org.junit.jupiter.api.Test
     void contarDiasLluviosos() {
+        vaciarDias();
         rellenarDias();
         //La mitad entera, 182(total dias en false)
         Assertions.assertEquals(182,DiasLluviosos.contarDiasLluviosos());
@@ -58,12 +66,21 @@ class DiasLluviososTest {
 
     @org.junit.jupiter.api.Test
     void consultarCuatrimestreMasLluvioso() {
+        int n = DiasLluviosos.getDias().length/4; //91 dias por cuatrimestre con división entera
+        int cuatrimestreAComprobar = 3;
+        n = n * cuatrimestreAComprobar;
+        for(int i = n-91;i < n;i++){
+            DiasLluviosos.registrarQueLlovioElDia(i,true);
+        }
+        //System.out.println(Arrays.toString(DiasLluviosos.getDias()));
+        //System.out.println(DiasLluviosos.consultarCuatrimestreMasLluvioso());
+        Assertions.assertEquals(3,DiasLluviosos.consultarCuatrimestreMasLluvioso());
     }
 
     @org.junit.jupiter.api.Test
     void consultarPrimerDiaConLluvia() {
         //Vector vacío, ningún día llovió, devuelve -1
-        DiasLluviosos.setDias(new boolean[365]);
+        vaciarDias();
         Assertions.assertEquals(-1,DiasLluviosos.consultarPrimerDiaConLluvia());
         //Rellenando vector
         DiasLluviosos.registrarQueLlovioElDia(16,true); //Primer día
